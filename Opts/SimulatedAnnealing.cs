@@ -6,39 +6,29 @@ using System.Threading.Tasks;
 
 namespace Opts
 {
-    public class Solution
-    {
-        public int Cost { get; set; }
-
-    }
-
-    public class CostFunction
-    {
-
-    }
-
     public class SimulatedAnnealing
     {
         private Random _random = new Random();
-        private double _initialTemperature;
-        private double _minTemperature;
-        private int _maxIterations;
+        private double t;
+        private int u;
+        private int q;
+        private List<int> initialSolution;
 
-        public SimulatedAnnealing(double initialTemperature, double minTemperature, int maxIterations)
+        public SimulatedAnnealing(double initialTemperature, int maxIterations, int temperatureChange, List<int> initialSolution)
         {
-            _initialTemperature = initialTemperature;
-            _minTemperature = minTemperature;
-            _maxIterations = maxIterations;
+            this.t = initialTemperature;
+            this.u = maxIterations;
+            this.q = temperatureChange;
+            this.initialSolution = initialSolution;
         }
 
-        public Solution FindMinimum(CostFunction costFunction, Solution initialSolution)
+        public List<int> FindMinimum()
         {
-            var currentSolution = initialSolution;
-            var bestSolution = initialSolution;
+            var currentSolution = this.initialSolution;
+            var bestSolution = this.initialSolution;
 
-            for (int i = 0; i < _maxIterations; i++)
+            for (int i = 0; i < u; i++)
             {
-                // Generate a random new solution by making small changes to the current solution
                 var newSolution = GenerateRandomNeighbor(currentSolution);
 
                 // Calculate the difference in cost between the new solution and the current solution
@@ -76,11 +66,27 @@ namespace Opts
             return bestSolution;
         }
 
-        private Solution GenerateRandomNeighbor(Solution solution)
+        private List<int> GenerateRandomNeighbor(List<int> solution)
         {
-            // Make small changes to the solution to generate a new solution
-            // ...
-            return new Solution();
+            List<int> newSolution = null;
+            while(newSolution == null)
+            {
+                var firstIndex = _random.Next(1, solution.Count - 4);
+                var secondIndex = _random.Next(1, solution.Count - 4);
+                if(Math.Abs(firstIndex - secondIndex) > 3)
+                {
+                    var firstRange = solution.GetRange(firstIndex, 4);
+                    solution.RemoveRange(firstIndex, 4);
+                    var secondRange = solution.GetRange(secondIndex, 4);
+                    solution.RemoveRange(secondIndex, 4);
+
+                    solution.InsertRange(firstIndex, secondRange);
+                    solution.InsertRange(secondIndex, firstRange);
+                    newSolution = solution;
+                }
+            }
+
+            return newSolution;
         }
     }
 }

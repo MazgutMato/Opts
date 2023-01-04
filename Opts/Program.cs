@@ -3,8 +3,8 @@ using System.Text;
 
 Console.WriteLine("Loading file...");
 
-//var input = File.ReadAllLines(@"E:\FRI\7.semester\OPTS\Opts\Matica_TN_(0276).txt");
-var input = File.ReadAllLines(@"E:\FRI\7.semester\OPTS\Opts\Matica_BB_(0515).txt");
+var input = File.ReadAllLines(@"E:\FRI\7.semester\OPTS\Opts\Matica_TN_(0276).txt");
+//var input = File.ReadAllLines(@"E:\FRI\7.semester\OPTS\Opts\Matica_BB_(0515).txt");
 //var input = File.ReadAllLines(@"E:\FRI\7.semester\OPTS\Opts\Matica_Moja.txt");
 
 //Load dij
