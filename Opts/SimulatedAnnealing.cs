@@ -80,7 +80,7 @@ namespace Opts
         {
             // Make small changes to the solution to generate a new solution
             // ...
-            return newSolution;
+            return new Solution();
         }
     }
 }

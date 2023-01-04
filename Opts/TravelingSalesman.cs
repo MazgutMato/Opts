@@ -10,10 +10,12 @@ namespace Opts
     {
         public static int GetLength(int[,] dij, List<int> tour)
         {
+            var length = 0;
             for(var i = 0; i < tour.Count - 1; i++)
             {
-
+                length += dij[tour[i], tour[i + 1]];
             }
+            return length;
         }
         public static List<int> GenerateTour(int[,] dij)
         {
@@ -21,7 +23,7 @@ namespace Opts
             //Default way
             var included = new List<int>();
             var notIncluded = new List<int>();
-            for (var nodes = 0; nodes < dij.Length; nodes++)
+            for (var nodes = 0; nodes < dij.GetLength(0); nodes++)
             {
                 notIncluded.Add(nodes);
             }
@@ -32,7 +34,7 @@ namespace Opts
 
             //I2
             var second = -1;
-            for (var col = 0; col < dij.Length; col++)
+            for (var col = 0; col < dij.GetLength(0); col++)
             {
                 var length = dij[included[0], col];
                 if ((second == -1 || length > dij[included[0], second]) && (!included.Contains(col)))
@@ -46,7 +48,7 @@ namespace Opts
 
             //I3
             var third = -1;
-            for (var col = 0; col < dij.Length; col++)
+            for (var col = 0; col < dij.GetLength(0); col++)
             {
                 var length = dij[included[1], col];
                 if ((third == -1 || length > dij[included[1], third]) && (!included.Contains(col)))

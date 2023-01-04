@@ -3,8 +3,8 @@ using System.Text;
 
 Console.WriteLine("Loading file...");
 
-var input = File.ReadAllLines(@"E:\FRI\7.semester\OPTS\Opts\Matica_TN_(0276).txt");
-//var input = File.ReadAllLines(@"E:\FRI\7.semester\OPTS\Opts\Matica_BB_(0515).txt");
+//var input = File.ReadAllLines(@"E:\FRI\7.semester\OPTS\Opts\Matica_TN_(0276).txt");
+var input = File.ReadAllLines(@"E:\FRI\7.semester\OPTS\Opts\Matica_BB_(0515).txt");
 //var input = File.ReadAllLines(@"E:\FRI\7.semester\OPTS\Opts\Matica_Moja.txt");
 
 //Load dij
@@ -31,11 +31,12 @@ foreach (var row in input)
 
 var tourNode = TravelingSalesman.GenerateTour(dij);
 string tour = "";
-foreach(var node in tourNode)
+for(var node = 0; node < tourNode.Count - 1; node++)
 {
-    tour += node + "->";    
+    tour += tourNode[node] + "->";    
 }
+tour += tourNode[tourNode.Count - 1];
 
-Console.WriteLine("Way: " + tour);
+Console.WriteLine("Tour: " + tour);
 Console.WriteLine("Node count: " + (tourNode.Count-1));
-Console.WriteLine("Length: " + totalLength);
+Console.WriteLine("Tour length: " + TravelingSalesman.GetLength(dij,tourNode));
