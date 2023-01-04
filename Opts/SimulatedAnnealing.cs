@@ -13,32 +13,49 @@ namespace Opts
         private int u;
         private int q;
         private List<int> initialSolution;
+        private int[,] dij;
 
-        public SimulatedAnnealing(double initialTemperature, int maxIterations, int temperatureChange, List<int> initialSolution)
+        public SimulatedAnnealing(double initialTemperature, int maxIterations, int temperatureChange, List<int> initialSolution, int[,] dij)
         {
             this.t = initialTemperature;
             this.u = maxIterations;
             this.q = temperatureChange;
             this.initialSolution = initialSolution;
+            this.dij = dij;
         }
 
         public List<int> FindMinimum()
         {
             var currentSolution = this.initialSolution;
             var bestSolution = this.initialSolution;
+            var r = 0;
+            var w = 0;
 
-            for (int i = 0; i < u; i++)
+            while(r != this.u)
             {
                 var newSolution = GenerateRandomNeighbor(currentSolution);
+                r++;
+                w++;
+
+                //Temperature change
+                if (w == q)
+                {
+                    t = t / 2;
+                    w = 0;
+                }
 
                 // Calculate the difference in cost between the new solution and the current solution
-                var delta = newSolution.Cost - currentSolution.Cost;
+                var newSolutionLength = TravelingSalesman.GetLength(this.dij, newSolution);
+                var currentSolutionLength = TravelingSalesman.GetLength(this.dij, currentSolution);
+                var delta = newSolutionLength - currentSolutionLength;                    
 
                 // If the new solution is better than the current solution, accept it
-                if (delta < 0)
+                if (delta <= 0)
                 {
                     currentSolution = newSolution;
-                    if (newSolution.Cost < bestSolution.Cost)
+                    r = 0;
+                    if (TravelingSalesman.GetLength(this.dij, newSolution) <=
+                        TravelingSalesman.GetLength(this.dij, bestSolution))
                     {
                         bestSolution = newSolution;
                     }
@@ -46,21 +63,13 @@ namespace Opts
                 // If the new solution is worse than the current solution, accept it with probability exp(-delta/T)
                 else
                 {
-                    var probability = Math.Exp(-delta / _initialTemperature);
+                    var probability = Math.Exp(-delta / t);
                     if (_random.NextDouble() < probability)
                     {
                         currentSolution = newSolution;
                     }
                 }
 
-                // Cool down the temperature
-                _initialTemperature *= 0.9;
-
-                // If the temperature has reached the minimum temperature, stop
-                if (_initialTemperature < _minTemperature)
-                {
-                    break;
-                }
             }
 
             return bestSolution;
@@ -75,14 +84,14 @@ namespace Opts
                 var secondIndex = _random.Next(1, solution.Count - 4);
                 if(Math.Abs(firstIndex - secondIndex) > 3)
                 {
-                    var firstRange = solution.GetRange(firstIndex, 4);
-                    solution.RemoveRange(firstIndex, 4);
-                    var secondRange = solution.GetRange(secondIndex, 4);
-                    solution.RemoveRange(secondIndex, 4);
+                    newSolution = new List<int>(solution);
+                    var firstRange = newSolution.GetRange(firstIndex, 4);
+                    var secondRange = newSolution.GetRange(secondIndex, 4);
 
-                    solution.InsertRange(firstIndex, secondRange);
-                    solution.InsertRange(secondIndex, firstRange);
-                    newSolution = solution;
+                    newSolution.RemoveRange(firstIndex, 4);
+                    newSolution.InsertRange(firstIndex, secondRange);
+                    newSolution.RemoveRange(secondIndex, 4);
+                    newSolution.InsertRange(secondIndex, firstRange);
                 }
             }
 
