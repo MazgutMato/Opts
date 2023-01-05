@@ -44,12 +44,10 @@ namespace Opts
                     w = 0;
                 }
 
-                // Calculate the difference in cost between the new solution and the current solution
                 var newSolutionLength = TravelingSalesman.GetLength(this.dij, newSolution);
                 var currentSolutionLength = TravelingSalesman.GetLength(this.dij, currentSolution);
                 var delta = newSolutionLength - currentSolutionLength;                    
 
-                // If the new solution is better than the current solution, accept it
                 if (delta <= 0)
                 {
                     currentSolution = newSolution;
@@ -60,7 +58,6 @@ namespace Opts
                         bestSolution = newSolution;
                     }
                 }
-                // If the new solution is worse than the current solution, accept it with probability exp(-delta/T)
                 else
                 {
                     var probability = Math.Exp(-delta / t);
