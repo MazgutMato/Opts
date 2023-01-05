@@ -64,6 +64,7 @@ namespace Opts
                     if (_random.NextDouble() < probability)
                     {
                         currentSolution = newSolution;
+                        r = 0;
                     }
                 }
 
