@@ -8,14 +8,15 @@ namespace Opts
 {
     public class SimulatedAnnealing
     {
-        private Random _random = new Random();
+        private Random random = new Random();
         private double t;
         private int u;
         private int q;
         private List<int> initialSolution;
         private int[,] dij;
 
-        public SimulatedAnnealing(double initialTemperature, int maxIterations, int temperatureChange, List<int> initialSolution, int[,] dij)
+        public SimulatedAnnealing(double initialTemperature, int maxIterations, int temperatureChange, 
+            List<int> initialSolution, int[,] dij)
         {
             this.t = initialTemperature;
             this.u = maxIterations;
@@ -61,7 +62,7 @@ namespace Opts
                 else
                 {
                     var probability = Math.Exp(-delta / t);
-                    if (_random.NextDouble() < probability)
+                    if (random.NextDouble() < probability)
                     {
                         currentSolution = newSolution;
                         r = 0;
@@ -78,8 +79,8 @@ namespace Opts
             List<int> newSolution = null;
             while(newSolution == null)
             {
-                var firstIndex = _random.Next(1, solution.Count - 4);
-                var secondIndex = _random.Next(1, solution.Count - 4);
+                var firstIndex = random.Next(1, solution.Count - 4);
+                var secondIndex = random.Next(1, solution.Count - 4);
                 if(Math.Abs(firstIndex - secondIndex) > 3)
                 {
                     newSolution = new List<int>(solution);

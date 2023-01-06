@@ -8,15 +8,6 @@ namespace Opts
 {
     public static class TravelingSalesman
     {
-        public static int GetLength(int[,] dij, List<int> tour)
-        {
-            var length = 0;
-            for(var i = 0; i < tour.Count - 1; i++)
-            {
-                length += dij[tour[i], tour[i + 1]];
-            }
-            return length;
-        }
         public static List<int> GenerateTour(int[,] dij)
         {
             var totalLength = 0;
@@ -91,5 +82,14 @@ namespace Opts
 
             return included;
         }
+        public static int GetLength(int[,] dij, List<int> tour)
+        {
+            var length = 0;
+            for(var i = 0; i < tour.Count - 1; i++)
+            {
+                length += dij[tour[i], tour[i + 1]];
+            }
+            return length;
+        }        
     }
 }
